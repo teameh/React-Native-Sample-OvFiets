@@ -113,7 +113,13 @@ class ListView extends React.PureComponent {
     });
 
     this.setState({
-      history: [...this.state.history, location]
+      history: [
+        // filter out the item we will add to avoid duplicates
+        ...this.state.history.filter(
+          item => item.extra.locationCode !== location.extra.locationCode
+        ),
+        location
+      ]
     });
   };
 
