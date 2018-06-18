@@ -1,3 +1,12 @@
+# React Native Sample repo
+
+Sample app for [Presentation on React Native](http://teameh.github.io/react-native/build/index.html) @ Random Studio. 
+
+-----------------------------
+
+### Create React Native APP
+
+
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
