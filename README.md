@@ -2,6 +2,8 @@
 
 Sample app for [Presentation on React Native](http://teameh.github.io/react-native/build/index.html) @ Random Studio. 
 
+![Screenshots](https://i.imgur.com/5mQ1v5N.png)
+
 -----------------------------
 
 ### Create React Native APP
