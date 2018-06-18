@@ -2,10 +2,8 @@ import React from 'react';
 
 import { Platform, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
-import { COLORS, FONT_SIZE } from './consts';
+import { API_URL, COLORS } from './consts';
 import { Constants, Location, Permissions } from 'expo';
-
-
 
 const Container = styled.View`
   flex: 1;
@@ -18,34 +16,34 @@ const List = styled.SectionList`
 
 const Row = styled.View`
   flex-direction: row;
-  padding: 5%;
+  padding: 15px 10px;
 `;
 
 const Title = styled.Text`
    flex-grow: 2;
    color: ${COLORS.BLUE};
-   font-size: ${FONT_SIZE}px;
+   font-size: 20px;
 `;
 
 const Bikes = styled.Text`
   text-align: right;
   color: ${COLORS.BLUE};
-  font-size: ${FONT_SIZE}px;
+  font-size: 20px;
 `;
+
 const SectionHeader = styled.Text`
   background-color: ${COLORS.BLUE};
   color: ${COLORS.YELLOW};
-
-  padding: 5%;
-  font-size: ${FONT_SIZE}px;
-  font-weight: bold;
-  color: white;
+  padding: 5px 10px;
+  font-size: 18px;
+  color: ${COLORS.WHITE};
 `;
 
 class ListView extends React.PureComponent {
 
+  // title for react-navigation
   static navigationOptions = navigation => ({
-    title: 'Stations'
+    title: 'Ov Fiets'
   });
 
   state = {
@@ -63,14 +61,14 @@ class ListView extends React.PureComponent {
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
-        errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+        error: 'geolocation will not work in an Android emulator.',
       });
     } else {
-      this._getLocationAsync();
+      this.getLocationAsync();
     }
   }
 
-  _getLocationAsync = async () => {
+  getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({
@@ -90,14 +88,14 @@ class ListView extends React.PureComponent {
     });
 
     try {
-      const data = await fetch('http://fiets.openov.nl/locaties.json');
+      const data = await fetch(API_URL);
       const json = await data.json();
       this.setState({
         isLoading: false,
         locations: Object
           .values(json.locaties)
           .filter(location => location.description)
-          .sort((a, b) => a.description > b.description ? 1 : -1 ),
+          .sort((a, b) => a.description > b.description ? 1 : -1),
       })
 
     } catch (ex) {
@@ -123,16 +121,21 @@ class ListView extends React.PureComponent {
 
     const { isLoading, error, locations, history } = this.state;
 
+    const sections = [
+      { title: "Stations", data: locations }
+    ];
+
+    if (history.length > 0) {
+      sections.unshift({ title: "History", data: history });
+    }
+
     return (
       <Container>
         {isLoading && <Text>Loading...</Text>}
         {error && <Text>{error}</Text>}
         {locations.length > 0 && (
           <List
-            sections={[
-              { title: "history", data: history },
-              { title: "stations", data: locations }
-            ]}
+            sections={sections}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={this.handleTap.bind(this, item)}>
                 <Row>
@@ -140,13 +143,15 @@ class ListView extends React.PureComponent {
                     {item.description}
                   </Title>
                   <Bikes>
-                    {item.extra.rentalBikes}🚲
+                    {item.extra.rentalBikes} 🚲
                   </Bikes>
                 </Row>
               </TouchableOpacity>
             )}
-            renderSectionHeader={({section}) => (
-              <SectionHeader>{section.title}</SectionHeader>
+            renderSectionHeader={({ section }) => (
+              history.length > 0 ? (
+                <SectionHeader>{section.title}</SectionHeader>
+              ) : null
             )}
             keyExtractor={item => item.extra.locationCode}
           />

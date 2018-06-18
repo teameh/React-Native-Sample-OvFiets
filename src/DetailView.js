@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLORS, FONT_SIZE } from './consts';
+import { COLORS } from './consts';
 import { MapView } from 'expo';
 
 const Container = styled.View`
@@ -11,14 +11,14 @@ const Container = styled.View`
 const Bikes = styled.Text`
   text-align: center;
   color: ${COLORS.BLUE};
-  font-size: ${FONT_SIZE * 4}px;
+  font-size: 100px;
 `;
 
 const BikesIcon = styled.Text`
   text-align: center;
   color: ${COLORS.BLUE};
-  font-size: ${FONT_SIZE * 4}px;
-  line-height: ${FONT_SIZE * 3.92}px;
+  font-size: 100px;
+  line-height: 96px;
 `;
 
 const BikesContainer = styled.View`
@@ -36,14 +36,14 @@ class DetailView extends React.PureComponent {
     const location = this.props.navigation.getParam('location');
     const geoLocation = this.props.navigation.getParam('geoLocation');
 
-    console.log(JSON.stringify(geoLocation))
-
     return (
       <Container>
+
         <BikesContainer>
           <Bikes>{location.extra.rentalBikes}</Bikes>
           <BikesIcon>🚲</BikesIcon>
         </BikesContainer>
+
         <MapView
           style={{ flex: 1 }}
           initialRegion={{
@@ -69,14 +69,9 @@ class DetailView extends React.PureComponent {
             />
           )}
 
-
         </MapView>
 
-
-
       </Container>
-
-
     )
   }
 }

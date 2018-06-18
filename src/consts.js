@@ -1,6 +1,7 @@
 export const COLORS = {
   YELLOW: '#faca30',
   BLUE: '#00387b',
+  WHITE: 'white',
 };
 
-export const FONT_SIZE = 24;
+export const API_URL = 'http://fiets.openov.nl/locaties.json';
